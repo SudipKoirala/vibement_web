@@ -1,32 +1,50 @@
 {
   "compilerOptions": {
+    /* Target latest JavaScript features supported in Node/Next */
     "target": "ES2017",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    /* Allow JavaScript files, useful for hybrid projects */
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
     "noEmit": true,
-    "esModuleInterop": true,
+    /* Module system and resolution */
     "module": "esnext",
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
+    /* React JSX transform */
     "jsx": "react-jsx",
+    /* Incremental compilation for faster builds */
     "incremental": true,
+    /* Interoperability between CommonJS and ES Modules */
+    "esModuleInterop": true,
+    /* Plugins */
     "plugins": [
       {
         "name": "next"
       }
     ],
+    /* Path aliases */
     "paths": {
-      "@/*": ["./*"]
+      "@/*": [
+        "./*"
+      ]
     }
   },
   "include": [
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "**/*.mts"
+    "**/*.mts",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules"
+  ]
 }
