@@ -2,8 +2,6 @@
   "name": "frontend_vibement",
   "version": "0.1.0",
   "private": true,
-  
- 
   "scripts": {
     "dev": "next dev --webpack",
     "build": "next build",
@@ -21,7 +19,10 @@
   "devDependencies": {
     "@next/swc-win32-x64-msvc": "^16.1.1",
     "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^20.19.27",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "autoprefixer": "^10.4.23",
@@ -29,7 +30,7 @@
     "eslint-config-next": "16.1.1",
     "postcss": "^8.5.6",
     "tailwindcss": "^4.1.18",
-    "typescript": "^5"
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.9.3"
   }
-
 }
