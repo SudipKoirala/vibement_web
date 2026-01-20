@@ -34,7 +34,7 @@ export default function LoginForm() {
 
       if (result.success) {
         // Redirect to dashboard on success
-        window.location.href = "/dashboard";
+        window.location.href = "/auth/dashboard";
       } else {
         setError(result.error || "Login failed");
       }

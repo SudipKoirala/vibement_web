@@ -38,7 +38,7 @@ export default function RegisterForm() {
       const result = await authActions.register(data);
 
       if (result.success) {
-        window.location.href = "/dashboard";
+        window.location.href = "/auth/dashboard";
       } else {
         setError(result.error || "Registration failed");
       }
