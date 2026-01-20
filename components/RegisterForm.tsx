@@ -7,7 +7,7 @@ import * as z from "zod";
 import { authActions } from "../actions/auth";
 
 const registerSchema = z.object({
-  name: z.string().min(2, "Name required"),
+  username: z.string().min(2, "Username required"),
   email: z.string().email({ message: "Invalid email" }),
   password: z.string().min(6, { message: "Password must be 6+ chars" }),
   confirmPassword: z.string(),
@@ -60,13 +60,13 @@ export default function RegisterForm() {
       )}
 
       <div className="mb-4">
-        <label className="block text-gray-700 text-sm font-bold mb-2">Name</label>
+        <label className="block text-gray-700 text-sm font-bold mb-2">Username</label>
         <input
-          {...register("name")}
+          {...register("username")}
           className="w-full border px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
-          placeholder="Your Name"
+          placeholder="Your Username"
         />
-        {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>}
+        {errors.username && <p className="text-red-500 text-sm mt-1">{errors.username.message}</p>}
       </div>
       <div className="mb-4">
         <label className="block text-gray-700 text-sm font-bold mb-2">Email</label>
