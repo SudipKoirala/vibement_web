@@ -23,6 +23,7 @@ export const authActions = {
     register: async (data: RegisterData) => {
         try {
             const result = await authService.register(data);
+            console.log('Registration response:', result);
 
             if (result.token) {
                 Cookies.set('token', result.token, { expires: 7 });
@@ -32,7 +33,8 @@ export const authActions = {
             }
             return { success: true, data: result };
         } catch (error: any) {
-            const message = error.response?.data?.message || 'Registration failed';
+            console.error('Registration error:', error);
+            const message = error.response?.data?.message || error.message || 'Registration failed';
             return { success: false, error: message };
         }
     },
