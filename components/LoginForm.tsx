@@ -4,6 +4,8 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import { authService } from "../services/auth";
+import Cookies from "js-cookie";
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Invalid email" }),
@@ -29,14 +31,25 @@ export default function LoginForm() {
     setError(null);
 
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      // Call the actual backend API
+      const response = await authService.login({
+        email: data.email,
+        password: data.password,
+      });
 
-      // Mock success
-      console.log("Login data:", data);
+      console.log("Login successful:", response);
+
+      // Store the token in cookies
+      if (response.token) {
+        Cookies.set("token", response.token, { expires: 7 });
+      }
+
+      // Redirect to dashboard
       window.location.href = "/auth/dashboard";
-    } catch (err) {
-      setError("An unexpected error occurred");
+    } catch (err: any) {
+      console.error("Login error:", err);
+      const errorMessage = err.response?.data?.message || "Login failed. Please check your credentials.";
+      setError(errorMessage);
     } finally {
       setIsLoading(false);
     }

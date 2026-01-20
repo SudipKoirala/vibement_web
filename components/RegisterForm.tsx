@@ -4,6 +4,8 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import { authService } from "../services/auth";
+import Cookies from "js-cookie";
 
 const registerSchema = z.object({
   username: z.string().min(2, "Username required"),
@@ -20,6 +22,7 @@ type RegisterInput = z.infer<typeof registerSchema>;
 export default function RegisterForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -37,15 +40,34 @@ export default function RegisterForm() {
   const onSubmit = async (data: RegisterInput) => {
     setIsLoading(true);
     setError(null);
+    setSuccess(null);
 
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      // Call the actual backend API
+      const response = await authService.register({
+        username: data.username,
+        email: data.email,
+        password: data.password,
+      });
 
-      console.log("Register data:", data);
-      window.location.href = "/login";
-    } catch (err) {
-      setError("An unexpected error occurred");
+      console.log("Register successful:", response);
+
+      // Optionally store token if backend returns it on registration
+      if (response.token) {
+        Cookies.set("token", response.token, { expires: 7 });
+      }
+
+      // Show success message
+      setSuccess("Signup successful! Redirecting to login...");
+
+      // Redirect to login page after 2 seconds
+      setTimeout(() => {
+        window.location.href = "/login";
+      }, 2000);
+    } catch (err: any) {
+      console.error("Registration error:", err);
+      const errorMessage = err.response?.data?.message || "Registration failed. Please try again.";
+      setError(errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -71,6 +93,16 @@ export default function RegisterForm() {
           </h2>
           <p className="text-gray-600">Join Vibement and get started today</p>
         </div>
+
+        {/* Success Alert */}
+        {success && (
+          <div className="mb-6 p-4 bg-green-50 border border-green-200 text-green-700 rounded-lg text-sm flex items-start space-x-2">
+            <svg className="w-5 h-5 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+            </svg>
+            <span>{success}</span>
+          </div>
+        )}
 
         {/* Error Alert */}
         {error && (
