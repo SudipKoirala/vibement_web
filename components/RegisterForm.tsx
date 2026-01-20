@@ -43,7 +43,7 @@ export default function RegisterForm() {
       await new Promise(resolve => setTimeout(resolve, 1500));
 
       console.log("Register data:", data);
-      window.location.href = "/auth/dashboard";
+      window.location.href = "/login";
     } catch (err) {
       setError("An unexpected error occurred");
     } finally {
