@@ -23,6 +23,7 @@
   "homepage": "https://github.com/SudipKoirala/vibement_web#readme",
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
+    "@tailwindcss/postcss": "^4.1.18",
     "autoprefixer": "^10.4.23",
     "axios": "^1.13.2",
     "clsx": "^2.1.1",
@@ -33,7 +34,7 @@
     "react-dom": "^19.2.3",
     "react-hook-form": "^7.71.1",
     "tailwind-merge": "^3.4.0",
-    "tailwindcss": "^4.1.18",
+    "tailwindcss": "^4.0.0",
     "zod": "^4.3.5"
   },
   "devDependencies": {
