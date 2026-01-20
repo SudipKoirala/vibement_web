@@ -50,9 +50,10 @@ const LoginPage = () => {
       display: 'flex', 
       alignItems: 'center', 
       justifyContent: 'center', 
-      height: '100vh',
+      minHeight: '100vh',
       background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-      fontFamily: 'Segoe UI, Tahoma, Geneva, Verdana, sans-serif'
+      fontFamily: 'Segoe UI, Tahoma, Geneva, Verdana, sans-serif',
+      padding: '20px'
     }}>
       <div style={{
         background: 'white',
@@ -62,13 +63,14 @@ const LoginPage = () => {
         width: '100%',
         maxWidth: '400px',
         backdropFilter: 'blur(10px)',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center'
       }}>
-        <div style={{ textAlign: 'center', marginBottom: '30px' }}>
-          <h1 style={{ fontSize: '2rem', color: '#667eea', margin: '0 0 10px 0' }}>VibeMent</h1>
-          <p style={{ color: '#888', margin: '0', fontSize: '0.9rem' }}>Join the vibe</p>
-        </div>
+        <h2 style={{ textAlign: 'center', marginBottom: '30px', color: '#333', fontSize: '1.5rem', width: '100%' }}>Login</h2>
 
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)} style={{ width: '100%' }}>
           {error && (
             <div style={{
               marginBottom: '15px',
@@ -161,7 +163,7 @@ const LoginPage = () => {
         <p style={{ textAlign: 'center', marginTop: '20px', color: '#666' }}>
           Don't have an account?{' '}
           <Link href="/register" style={{ color: '#667eea', textDecoration: 'none', fontWeight: '600' }}>
-            Register here
+            signup for free
           </Link>
         </p>
       </div>
