@@ -21,4 +21,13 @@ export const authService = {
         const response = await api.post('/api/auth/register', data);
         return response.data;
     },
+
+    updateProfile: async (id: string, formData: FormData) => {
+        const response = await api.put(`/api/auth/${id}`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+        return response.data;
+    },
 };
