@@ -40,21 +40,15 @@ export default function LoginForm({ onSwitch }: LoginFormProps) {
         password: data.password,
       });
 
-      console.log("Login successful:", response);
-
       if (response.token) {
         Cookies.set("token", response.token, { expires: 7 });
       }
       if (response.user) {
         Cookies.set("user", JSON.stringify(response.user), { expires: 7 });
-        if (response.user.role) {
-          Cookies.set("role", response.user.role, { expires: 7 });
-        }
       }
 
-      window.location.href = "/auth/dashboard";
+      window.location.href = "/feed";
     } catch (err: any) {
-      console.error("Login error:", err);
       const errorMessage = err.response?.data?.message || "Login failed. Please check your credentials.";
       setError(errorMessage);
     } finally {

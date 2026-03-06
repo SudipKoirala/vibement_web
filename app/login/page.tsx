@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { Suspense, useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import LoginForm from "../../components/LoginForm";
 import RegisterForm from "../../components/RegisterForm";
@@ -15,7 +15,7 @@ function LoginPageContent() {
       setIsLogin(false);
     }
   }, [searchParams]);
-
+  
   const handleSwitch = () => {
     if (isAnimating) return;
     setIsAnimating(true);
@@ -29,16 +29,13 @@ function LoginPageContent() {
       setIsAnimating(false);
     }, 900);
   };
-
   return (
-    // Changed: Removed padding, added w-screen h-screen
     <div className="h-screen w-screen bg-gray-100 overflow-hidden">
-      {/* Main Container - Now Full Screen */}
+
       <div className="relative w-full h-full bg-white flex overflow-hidden">
 
-        {/* THE STATIC FORM LAYER */}
         <div className="absolute inset-0 flex w-full h-full">
-          {/* Left Side Slot */}
+
           <div className="w-1/2 h-full flex items-center justify-center p-12 bg-gray-50">
             {!isLogin && !isAnimating && (
               <div className="w-full max-w-md animate-form-entry">
@@ -46,8 +43,6 @@ function LoginPageContent() {
               </div>
             )}
           </div>
-
-          {/* Right Side Slot */}
           <div className="w-1/2 h-full flex items-center justify-center p-12 bg-white">
             {isLogin && !isAnimating && (
               <div className="w-full max-w-md animate-form-entry">
@@ -56,8 +51,6 @@ function LoginPageContent() {
             )}
           </div>
         </div>
-
-        {/* THE ROLLING WELCOME BOX */}
         <div
           className={`
             hidden lg:flex absolute top-0 bottom-0 w-1/2 z-20
@@ -68,7 +61,6 @@ function LoginPageContent() {
           `}
           style={{ transformStyle: 'preserve-3d' }}
         >
-          {/* Content inside the rolling box */}
           <div className={`text-white text-center max-w-lg transition-opacity duration-300 ${isAnimating ? 'opacity-0' : 'opacity-100'}`}>
             <h1 className="text-6xl font-extrabold mb-6">
               {isLogin ? "Welcome Back!" : "Hello, Viber!"}
@@ -91,7 +83,10 @@ function LoginPageContent() {
     </div>
   );
 }
-
 export default function LoginPage() {
-  return <LoginPageContent />;
+  return (
+    <Suspense fallback={<div className="h-screen w-screen bg-gray-100" />}>
+      <LoginPageContent />
+    </Suspense>
+  );
 }

@@ -24,17 +24,7 @@ api.interceptors.request.use(
 api.interceptors.response.use(
     (response) => response,
     (error) => {
-        if (error.response) {
-            if (error.response.status === 401) {
-                // Handle unauthorized
-                console.error('Unauthorized access - please log in again.');
-                // Optional: clear cookies or redirect
-                // Cookies.remove('token');
-                // window.location.href = '/login';
-            } else if (error.response.status === 500) {
-                console.error('Server error - please try again later.');
-            }
-        }
+        // Handle specific error responses silently
         return Promise.reject(error);
     }
 );

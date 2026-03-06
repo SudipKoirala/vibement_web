@@ -53,8 +53,6 @@ export default function RegisterForm({ onSwitch }: RegisterFormProps) {
         password: data.password,
       });
 
-      console.log("Register successful:", response);
-
       if (response.token) {
         Cookies.set("token", response.token, { expires: 7 });
       }
@@ -65,8 +63,7 @@ export default function RegisterForm({ onSwitch }: RegisterFormProps) {
         if (onSwitch) onSwitch();
       }, 1500);
     } catch (err: any) {
-      console.error("Registration error:", err);
-      const errorMessage = err.response?.data?.message || "Registration failed. Please try again.";
+      const errorMessage = err.response?.data?.message || err.message || "Registration failed. Please try again.";
       setError(errorMessage);
     } finally {
       setIsLoading(false);
