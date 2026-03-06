@@ -1,80 +1,97 @@
 "use client";
 
+import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import LoginForm from "../../components/LoginForm";
-import Head from "next/head";
+import RegisterForm from "../../components/RegisterForm";
+
+function LoginPageContent() {
+  const searchParams = useSearchParams();
+  const [isLogin, setIsLogin] = useState(true);
+  const [isAnimating, setIsAnimating] = useState(false);
+
+  useEffect(() => {
+    if (searchParams.get("mode") === "register") {
+      setIsLogin(false);
+    }
+  }, [searchParams]);
+
+  const handleSwitch = () => {
+    if (isAnimating) return;
+    setIsAnimating(true);
+
+    // Switch text halfway through the roll
+    setTimeout(() => {
+      setIsLogin((prev) => !prev);
+    }, 450);
+
+    setTimeout(() => {
+      setIsAnimating(false);
+    }, 900);
+  };
+
+  return (
+    // Changed: Removed padding, added w-screen h-screen
+    <div className="h-screen w-screen bg-gray-100 overflow-hidden">
+      {/* Main Container - Now Full Screen */}
+      <div className="relative w-full h-full bg-white flex overflow-hidden">
+
+        {/* THE STATIC FORM LAYER */}
+        <div className="absolute inset-0 flex w-full h-full">
+          {/* Left Side Slot */}
+          <div className="w-1/2 h-full flex items-center justify-center p-12 bg-gray-50">
+            {!isLogin && !isAnimating && (
+              <div className="w-full max-w-md animate-form-entry">
+                <RegisterForm onSwitch={handleSwitch} />
+              </div>
+            )}
+          </div>
+
+          {/* Right Side Slot */}
+          <div className="w-1/2 h-full flex items-center justify-center p-12 bg-white">
+            {isLogin && !isAnimating && (
+              <div className="w-full max-w-md animate-form-entry">
+                <LoginForm onSwitch={handleSwitch} />
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* THE ROLLING WELCOME BOX */}
+        <div
+          className={`
+            hidden lg:flex absolute top-0 bottom-0 w-1/2 z-20
+            bg-gradient-to-br from-green-600 via-emerald-600 to-teal-600
+            items-center justify-center p-20 transition-all duration-900 ease-in-out
+            ${isLogin ? 'translate-x-0' : 'translate-x-full'} 
+            ${isAnimating ? 'rolling-animation' : ''}
+          `}
+          style={{ transformStyle: 'preserve-3d' }}
+        >
+          {/* Content inside the rolling box */}
+          <div className={`text-white text-center max-w-lg transition-opacity duration-300 ${isAnimating ? 'opacity-0' : 'opacity-100'}`}>
+            <h1 className="text-6xl font-extrabold mb-6">
+              {isLogin ? "Welcome Back!" : "Hello, Viber!"}
+            </h1>
+            <p className="text-xl mb-12 opacity-90 leading-relaxed">
+              {isLogin
+                ? "Login your account fast, and start vibing already"
+                : "Enter your personal details and start vibing already"}
+            </p>
+            <button
+              onClick={handleSwitch}
+              className="px-16 py-4 border-2 border-white rounded-full text-lg font-bold hover:bg-white hover:text-emerald-600 transition-all transform hover:scale-105 active:scale-95"
+            >
+              {isLogin ? "SIGN UP" : "SIGN IN"}
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  );
+}
 
 export default function LoginPage() {
-  return (
-    <>
-      <Head>
-        <title>Login - Vibement</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-      </Head>
-
-      <div className="min-h-screen w-full flex flex-col lg:flex-row">
-        {/* Left Side - Welcome Section */}
-        <div className="lg:w-1/2 bg-gradient-to-br from-green-600 via-emerald-600 to-teal-600 flex items-center justify-center p-8 lg:p-16">
-          <div className="max-w-lg text-white">
-            {/* Logo */}
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-white/20 backdrop-blur-sm rounded-3xl shadow-2xl mb-8">
-              <span className="text-white font-bold text-4xl">V</span>
-            </div>
-
-            {/* Welcome Text */}
-            <h1 className="text-5xl lg:text-6xl font-bold mb-6 leading-tight">
-              Welcome Back to
-              <span className="block mt-2 text-white/90">Vibement</span>
-            </h1>
-
-            <p className="text-xl text-white/90 mb-8 leading-relaxed">
-              Continue your journey with us. Sign in to access your personalized experience and connect with what matters most.
-            </p>
-
-            {/* Features */}
-            <div className="space-y-4">
-              <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center">
-                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                </div>
-                <span className="text-lg text-white/90">Secure and encrypted</span>
-              </div>
-
-              <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center">
-                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
-                </div>
-                <span className="text-lg text-white/90">Lightning fast access</span>
-              </div>
-
-              <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center">
-                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                  </svg>
-                </div>
-                <span className="text-lg text-white/90">Join our community</span>
-              </div>
-            </div>
-
-            {/* Decorative Elements */}
-            <div className="mt-12 flex items-center space-x-2 text-white/70">
-              <div className="w-12 h-1 bg-white/30 rounded-full"></div>
-              <span className="text-sm">Trusted by thousands</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Right Side - Login Form */}
-        <div className="lg:w-1/2 bg-gray-50 flex items-center justify-center p-8 lg:p-16">
-          <div className="w-full max-w-md">
-            <LoginForm />
-          </div>
-        </div>
-      </div>
-    </>
-  );
+  return <LoginPageContent />;
 }

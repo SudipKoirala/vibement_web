@@ -8,15 +8,25 @@ export default function AdminUsersPage() {
     const [users, setUsers] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
+    const [page, setPage] = useState(1);
+    const [totalUsers, setTotalUsers] = useState(0);
+    const [stats, setStats] = useState<any>(null);
+    const limit = 10;
 
     useEffect(() => {
         fetchUsers();
-    }, []);
+    }, [page]);
 
     const fetchUsers = async () => {
+        setLoading(true);
         try {
-            const data = await userService.getAllUsers();
-            setUsers(data);
+            const [usersData, statsData] = await Promise.all([
+                userService.getAllUsers(page, limit),
+                userService.getStats()
+            ]);
+            setUsers(usersData.users);
+            setTotalUsers(usersData.total);
+            setStats(statsData);
         } catch (err: any) {
             setError(err.response?.data?.message || 'Failed to fetch users');
         } finally {
@@ -50,6 +60,27 @@ export default function AdminUsersPage() {
             </div>
 
             {error && <div className="bg-red-100 text-red-700 p-4 rounded mb-6">{error}</div>}
+
+            {stats && (
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                    <div className="bg-white p-6 rounded-xl shadow border-l-4 border-blue-500">
+                        <p className="text-sm text-gray-500 font-medium uppercase">Total Users</p>
+                        <p className="text-3xl font-bold text-gray-900">{stats.total}</p>
+                    </div>
+                    <div className="bg-white p-6 rounded-xl shadow border-l-4 border-purple-500">
+                        <p className="text-sm text-gray-500 font-medium uppercase">Admins</p>
+                        <p className="text-3xl font-bold text-gray-900">{stats.admins}</p>
+                    </div>
+                    <div className="bg-white p-6 rounded-xl shadow border-l-4 border-green-500">
+                        <p className="text-sm text-gray-500 font-medium uppercase">Regular Users</p>
+                        <p className="text-3xl font-bold text-gray-900">{stats.regularUsers}</p>
+                    </div>
+                    <div className="bg-white p-6 rounded-xl shadow border-l-4 border-yellow-500">
+                        <p className="text-sm text-gray-500 font-medium uppercase">New (Last 7 Days)</p>
+                        <p className="text-3xl font-bold text-gray-900">{stats.recentUsers}</p>
+                    </div>
+                </div>
+            )}
 
             <div className="bg-white rounded-lg shadow overflow-hidden">
                 <table className="min-w-full divide-y divide-gray-200">
@@ -93,6 +124,29 @@ export default function AdminUsersPage() {
                         ))}
                     </tbody>
                 </table>
+            </div>
+
+            {/* Pagination Controls */}
+            <div className="mt-6 flex justify-between items-center bg-white p-4 rounded-lg shadow">
+                <div className="text-sm text-gray-700">
+                    Showing <span className="font-medium">{(page - 1) * limit + 1}</span> to <span className="font-medium">{Math.min(page * limit, totalUsers)}</span> of <span className="font-medium">{totalUsers}</span> users
+                </div>
+                <div className="flex space-x-2">
+                    <button
+                        onClick={() => setPage(p => Math.max(1, p - 1))}
+                        disabled={page === 1}
+                        className="px-4 py-2 border rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50"
+                    >
+                        Previous
+                    </button>
+                    <button
+                        onClick={() => setPage(p => Math.min(Math.ceil(totalUsers / limit), p + 1))}
+                        disabled={page >= Math.ceil(totalUsers / limit)}
+                        className="px-4 py-2 border rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50"
+                    >
+                        Next
+                    </button>
+                </div>
             </div>
         </div>
     );
