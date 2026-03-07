@@ -1,10 +1,14 @@
-import Layout from "@/components/Layout";
-import RegisterForm from "../../components/RegisterForm";
+"use client";
+
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function RegisterPage() {
-  return (
-    <Layout title="Register">
-      <RegisterForm />
-    </Layout>
-  );
+  const router = useRouter();
+
+  useEffect(() => {
+    router.replace("/login?mode=register");
+  }, [router]);
+
+  return null;
 }

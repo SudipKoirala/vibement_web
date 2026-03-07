@@ -1,10 +1,16 @@
-import Layout from "../components/Layout";
+'use client';
+
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function HomePage() {
-  return (
-    <Layout title="Home">
-      <h1 className="text-3xl font-bold text-green-600">Welcome to Vibement Web!</h1>
-      <p className="mt-2">This is a dummy Home page for Sprint 1.</p>
-    </Layout>
-  );
+  const router = useRouter();
+
+  useEffect(() => {
+    // Redirect to login page on app load
+    router.push('/login');
+  }, [router]);
+
+  return null;
 }
+
